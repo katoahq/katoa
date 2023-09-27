@@ -1,12 +1,12 @@
 /**
- * # Cicada
+ * # Katoa
  *
  * Write CI/CD pipelines in TypeScript
  *
  * ## Get started with a simple pipeline
  *
  * ```ts
- * import { Job, Pipeline } from "https://deno.land/x/cicada/mod.ts";
+ * import { Job, Pipeline } from "https://deno.land/x/katoa/mod.ts";
  *
  * const job = new Job({
  *   name: "Hello World",
@@ -19,13 +19,13 @@
  * export default new Pipeline([job]);
  * ```
  *
- * For more information, see the [Cicada documentation](https://cicada.build/docs).
+ * For more information, see the [Katoa documentation](https://github.com/katoahq/docs).
  *
  * @module
  */
 
-import { resolve } from "https://deno.land/x/cicada/deps.ts";
-import { DockerImages } from "https://deno.land/x/cicada/types/dockerImages.ts";
+import { resolve } from "https://deno.land/x/katoa/deps.ts";
+import { DockerImages } from "https://deno.land/x/katoa/types/dockerImages.ts";
 
 /**
  * A file path represented as a string.
@@ -327,9 +327,7 @@ export class Pipeline {
 /**
  * A secret is a secure variable, secrets are not cached whereas env variables are.
  *
- * To use:
- *  - CLI: create a .env file or use the `--secret` flag.
- *  - Dashboard: create your secret key-value in the [Cicada dashboard](https://cicada.build)
+ * To use: create a .env file or use the `--secret` flag.
  *
  * To access to secret in code doing the following:
  *
@@ -338,10 +336,10 @@ export class Pipeline {
  * var gh_token = new Secret.value("github-secret-key")
  * ```
  *
- * `github-secret-key` is the name of the key for my secret stored in the .env file or in the cicada dashboard
+ * `github-secret-key` is the name of the key for my secret stored in the .env file
  */
 export class Secret {
-  static readonly #isInJob = Deno.env.has("CICADA_JOB");
+  static readonly #isInJob = Deno.env.has("KATOA_JOB");
   static readonly #secretsDir = "/run/secrets";
   #path = "";
 

@@ -142,7 +142,7 @@ impl Step {
             },
             StepRun::Args { args } => Exec::new(args.clone()),
             StepRun::DenoFunction => Exec::new([
-                "cicada",
+                "katoa",
                 "step",
                 &job_index.to_string(),
                 &step_index.to_string(),
@@ -270,7 +270,7 @@ impl JobResolved {
         project_directory: impl AsRef<Path>,
         github: &Option<Github>,
         job_index: usize,
-        cicada_image: Option<impl Into<String>>,
+        katoa_image: Option<impl Into<String>>,
         platform: Platform,
     ) -> Vec<u8> {
         use buildkit_rs::llb::*;
@@ -283,8 +283,8 @@ impl JobResolved {
 
         let mut local: Local = Local::new("local".into());
 
-        // Try to load excludes from `.cicadaignore`, `.containerignore`, `.dockerignore` in that order
-        for ignore_name in &[".cicadaignore", ".containerignore", ".dockerignore"] {
+        // Try to load excludes from `.katoaignore`, `.cicadaignore`, `.containerignore`, `.dockerignore` in that order
+        for ignore_name in &[".katoaignore", ".cicadaignore", ".containerignore", ".dockerignore"] {
             let ignore_path = project_directory.as_ref().join(ignore_name);
             if ignore_path.is_file() {
                 // Read the file, strip comments and empty lines
@@ -320,17 +320,19 @@ impl JobResolved {
         let deno_mount = Mount::layer_readonly(deno_image.output(), "/usr/local/bin/deno")
             .with_selector("/deno");
 
-        let cicada_image = match cicada_image {
-            Some(cicada_image) => Image::local(cicada_image.into()),
+        let katoa_image = match katoa_image {
+            Some(katoa_image) => Image::local(katoa_image.into()),
+
+            // FIXME: reference
             None => Image::new(format!(
-                "docker.io/cicadahq/cicada-bin:{}",
+                "docker.io/katoahq/katoa-bin:{}",
                 env!("CARGO_PKG_VERSION")
             )),
         }
         .with_platform(platform);
 
-        let cicada_mount = Mount::layer_readonly(cicada_image.output(), "/usr/local/bin/cicada")
-            .with_selector("/cicada");
+        let katoa_mount = Mount::layer_readonly(katoa_image.output(), "/usr/local/bin/katoa")
+            .with_selector("/katoa");
 
         let local_cp = Exec::shell(
             "/bin/sh",
@@ -345,10 +347,10 @@ impl JobResolved {
         env.extend([
             "CI=1".into(),
             format!(
-                "CICADA_PIPELINE_FILE={working_directory}/.cicada/{}",
+                "KATOA_PIPELINE_FILE={working_directory}/.katoa/{}",
                 module_name.as_ref()
             ),
-            "CICADA_JOB=1".into(),
+            "KATOA_JOB=1".into(),
         ]);
 
         if let Some(github_repository) = github {
@@ -372,7 +374,7 @@ impl JobResolved {
                     step_index,
                 )
                 .with_mount(deno_mount.clone())
-                .with_mount(cicada_mount.clone()),
+                .with_mount(katoa_mount.clone()),
             );
 
             prev_step = exec;
@@ -392,7 +394,7 @@ impl JobResolved {
         pipeline_name: String,
         project_directory: String,
         all_secrets: Vec<(String, String)>,
-        cicada_image: Option<String>,
+        katoa_image: Option<String>,
         buildctl_exe: PathBuf,
         no_cache: bool,
         gh_action_cache: bool,
@@ -431,7 +433,7 @@ impl JobResolved {
             // ))
             .env(
                 "BUILDKIT_HOST",
-                format!("{}-container://cicada-buildkitd", oci_backend.as_str()),
+                format!("{}-container://katoa-buildkitd", oci_backend.as_str()),
             );
 
         if gh_action_cache {
@@ -462,7 +464,7 @@ impl JobResolved {
             &project_directory,
             &github,
             job_index,
-            cicada_image,
+            katoa_image,
             platform,
         );
 
@@ -562,7 +564,7 @@ pub struct Pipeline {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 #[serde(tag = "type")]
-pub enum CicadaType {
+pub enum KatoaType {
     Pipeline(Pipeline),
     Image(Job),
 }

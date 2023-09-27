@@ -39,21 +39,21 @@ use crate::{
     bin_deps::{buildctl_exe, deno_exe, BUILDKIT_VERSION},
     dag::{invert_graph, topological_sort, Node},
     git::github_repo,
-    job::{CicadaType, InspectInfo, JobResolved, OnFail, Pipeline, TriggerOn},
+    job::{KatoaType, InspectInfo, JobResolved, OnFail, Pipeline, TriggerOn},
 };
 
-// Transform from https://deno.land/x/cicada/mod.ts to https://deno.land/x/cicada@vX.Y.X/mod.ts
+// Transform from https://deno.land/x/katoa/mod.ts to https://deno.land/x/katoa@vX.Y.X/mod.ts
 static DENO_LAND_REGEX: Lazy<regex::Regex> =
-    Lazy::new(|| regex::Regex::new(r#"deno.land/x/cicada/"#).unwrap());
+    Lazy::new(|| regex::Regex::new(r#"deno.land/x/katoa/"#).unwrap());
 
 fn replace_with_version(s: &str) -> String {
-    if std::env::var_os("CICADA_UNVERSIONED_DENO").is_some() || cfg!(debug_assertions) {
+    if std::env::var_os("KATOA_UNVERSIONED_DENO").is_some() || cfg!(debug_assertions) {
         return s.to_owned();
     }
 
     DENO_LAND_REGEX
         .replace_all(s, |_caps: &regex::Captures| {
-            format!("deno.land/x/cicada@v{}/", env!("CARGO_PKG_VERSION"))
+            format!("deno.land/x/katoa@v{}/", env!("CARGO_PKG_VERSION"))
         })
         .into_owned()
 }
@@ -117,7 +117,7 @@ where
         .arg(format!("--allow-read={proj_path}"))
         .arg(format!("--allow-write={}", out_path.display()))
         .arg("--allow-net")
-        .arg("--allow-env=CICADA_JOB");
+        .arg("--allow-env=KATOA_JOB");
 
     // Check for a `deno.json` file in the project directory, otherwise set no config file
     // TODO: we should add a allow-read for the config file if its outside the project directory
@@ -157,7 +157,7 @@ where
 
 /// Check that oci backend is working before doing anything else for clean error messages
 async fn runtime_checks(oci: &OciBackend) -> anyhow::Result<()> {
-    if std::env::var_os("CICADA_SKIP_CHECKS").is_some() {
+    if std::env::var_os("KATOA_SKIP_CHECKS").is_some() {
         return Ok(());
     }
 
@@ -167,29 +167,29 @@ async fn runtime_checks(oci: &OciBackend) -> anyhow::Result<()> {
         .await
     {
         Ok(output) if !output.status.success() => Err(anyhow::anyhow!(match oci {
-            OciBackend::Docker => "Docker is not running! Please start it to use Cicada",
-            OciBackend::Podman => "Failed to run podman! Please make sure it is installed and working to use Cicada",
+            OciBackend::Docker => "Docker is not running! Please start it to use Katoa",
+            OciBackend::Podman => "Failed to run podman! Please make sure it is installed and working to use Katoa",
         })),
         Ok(_) => Ok(()),
         Err(err) => Err(err).context(match oci {
-            OciBackend::Docker => "Cicada requires Docker to run. Please install it using your package manager or from https://docs.docker.com/engine/install",
-            OciBackend::Podman => "Cicada requires Podman to run. Please install it using your package manager or from https://podman.io/getting-started/installation",
+            OciBackend::Docker => "Katoa requires Docker to run. Please install it using your package manager or from https://docs.docker.com/engine/install",
+            OciBackend::Podman => "Katoa requires Podman to run. Please install it using your package manager or from https://podman.io/getting-started/installation",
         }),
     }
 }
 
-pub fn resolve_cicada_dir() -> Result<PathBuf> {
+pub fn resolve_katoa_dir() -> Result<PathBuf> {
     let mut path = std::env::current_dir()?;
 
     loop {
-        let cicada_path = path.join(".cicada");
-        if cicada_path.exists() {
-            return Ok(cicada_path);
+        let katoa_path = path.join(".katoa");
+        if katoa_path.exists() {
+            return Ok(katoa_path);
         }
 
         match path.parent() {
             Some(parent) => path = parent.to_path_buf(),
-            None => return Err(anyhow::anyhow!("Could not find .cicada directory")),
+            None => return Err(anyhow::anyhow!("Could not find .katoa directory")),
         }
     }
 }
@@ -197,16 +197,16 @@ pub fn resolve_cicada_dir() -> Result<PathBuf> {
 pub fn resolve_pipeline(pipeline: impl AsRef<Path>) -> Result<PathBuf> {
     let pipeline = pipeline.as_ref();
     if pipeline.is_file() {
-        // Check that the parent is a cicada dir
-        let cicada_dir = pipeline.parent().expect("Could not get parent");
-        if cicada_dir.ends_with(".cicada") {
+        // Check that the parent is a katoa dir
+        let katoa_dir = pipeline.parent().expect("Could not get parent");
+        if katoa_dir.ends_with(".katoa") {
             return Ok(pipeline.canonicalize()?);
         }
-        anyhow::bail!("Pipeline must be in the .cicada directory");
+        anyhow::bail!("Pipeline must be in the .katoa directory");
     }
 
-    let cicada_dir = resolve_cicada_dir()?;
-    let pipeline_path = cicada_dir.join(pipeline).with_extension("ts");
+    let katoa_dir = resolve_katoa_dir()?;
+    let pipeline_path = katoa_dir.join(pipeline).with_extension("ts");
     if pipeline_path.exists() {
         return Ok(pipeline_path);
     }
@@ -215,10 +215,10 @@ pub fn resolve_pipeline(pipeline: impl AsRef<Path>) -> Result<PathBuf> {
 }
 
 #[derive(Parser, Debug)]
-#[command(name = "cicada", bin_name = "cicada", author, version, about)]
+#[command(name = "katoa", bin_name = "katoa", author, version, about)]
 #[allow(clippy::large_enum_variant)]
 enum Commands {
-    /// Run a cicada pipeline
+    /// Run a katoa pipeline
     Run {
         /// Path to the pipeline file
         pipeline: Option<PathBuf>,
@@ -249,11 +249,11 @@ enum Commands {
         #[arg(long)]
         secrets_json: Option<PathBuf>,
 
-        /// A custom dockerfile to load the cicada bin from
+        /// A custom dockerfile to load the katoa bin from
         ///
         /// In the dev reop this is `./docker/bin.Dockerfile`
         #[arg(long, hide = true)]
-        cicada_dockerfile: Option<PathBuf>,
+        katoa_dockerfile: Option<PathBuf>,
 
         #[command(flatten)]
         oci_args: OciArgs,
@@ -269,17 +269,17 @@ enum Commands {
         /// Sets the default platform to use
         ///
         /// Example: `linux/amd64` or `linux/arm64`
-        #[arg(long, env = "CICADA_PLATFORM", default_value = "linux/amd64")]
+        #[arg(long, env = "KATOA_PLATFORM", default_value = "linux/amd64")]
         platform: Platform,
     },
-    /// Run a step in a cicada workflow
+    /// Run a step in a katoa workflow
     #[command(hide = true)]
     Step { workflow: usize, step: usize },
-    /// Initialize a cicada project, you can optionally specify a pipeline to create
+    /// Initialize a katoa project, you can optionally specify a pipeline to create
     Init { pipeline: Option<String> },
-    /// Create a cicada pipeline
+    /// Create a katoa pipeline
     New { pipeline: String },
-    /// Update cicada
+    /// Update katoa
     Update,
     /// List all available completions
     Completions { shell: clap_complete::Shell },
@@ -311,7 +311,7 @@ impl Commands {
                 no_dotenv,
                 dotenv,
                 secrets_json,
-                cicada_dockerfile,
+                katoa_dockerfile,
                 oci_args,
                 no_cache,
                 gh_action_cache,
@@ -328,10 +328,10 @@ impl Commands {
                 let pipeline = match pipeline {
                     Some(pipeline) => pipeline,
                     None => {
-                        let cicada_dir = resolve_cicada_dir()?;
+                        let katoa_dir = resolve_katoa_dir()?;
 
                         let mut pipelines = vec![];
-                        for entry in std::fs::read_dir(cicada_dir)? {
+                        for entry in std::fs::read_dir(katoa_dir)? {
                             let entry = entry?;
                             if entry.path().extension() == Some(OsStr::new("ts")) {
                                 if let Some(pipeline) = entry.path().file_stem() {
@@ -364,10 +364,10 @@ impl Commands {
                 info!(
                     "\n{}{}\n{}{}\n",
                     " ◥◣ ▲ ◢◤ ".if_supports_color(Stream::Stderr, |s| s.fg_rgb::<145, 209, 249>()),
-                    " Cicada is in alpha, it may not work as expected"
+                    " Katoa is in alpha, it may not work as expected"
                         .if_supports_color(Stream::Stderr, |s| s.bold()),
                     "  ◸ ▽ ◹  ".if_supports_color(Stream::Stderr, |s| s.fg_rgb::<145, 209, 249>()),
-                    " Please report any issues here: https://github.com/cicadahq/cicada"
+                    " Please report any issues here: https://github.com/katoahq/katoa"
                         .if_supports_color(Stream::Stderr, |s| s.bold())
                 );
                 eprintln!();
@@ -375,20 +375,21 @@ impl Commands {
                 let deno_exe = deno_exe().await?;
                 let buildctl_exe = buildctl_exe().await?;
 
-                let cicada_image = if let Some(cicada_dockerfile) = cicada_dockerfile {
+                let katoa_image = if let Some(katoa_dockerfile) = katoa_dockerfile {
                     let tag = format!(
-                        "docker.io/cicadahq/cicada-bin:{}-dev",
+                        // FIXME: reference
+                        "docker.io/katoahq/katoa-bin:{}-dev",
                         env!("CARGO_PKG_VERSION")
                     );
 
-                    info!("Building cicada bootstrap image...\n");
+                    info!("Building katoa bootstrap image...\n");
 
                     let status = Command::new(oci_backend.as_str())
                         .arg("build")
                         .arg("-t")
                         .arg(&tag)
                         .arg("-f")
-                        .arg(cicada_dockerfile)
+                        .arg(katoa_dockerfile)
                         .arg(".")
                         .spawn()?
                         .wait()
@@ -399,12 +400,12 @@ impl Commands {
 
                     if !status.success() {
                         anyhow::bail!(
-                            "Unable to build cicada bootstrap image, please check the {} build output",
+                            "Unable to build katoa bootstrap image, please check the {} build output",
                             oci_backend.as_str()
                         );
                     }
 
-                    info!("\nBuilt cicada bootstrap image: {}\n", tag.bold());
+                    info!("\nBuilt katoa bootstrap image: {}\n", tag.bold());
 
                     Some(tag)
                 } else {
@@ -453,9 +454,9 @@ impl Commands {
                     std::fs::read_to_string(tmp_file.path())?
                 };
 
-                let pipeline = match serde_json::from_str::<CicadaType>(&out)? {
-                    CicadaType::Pipeline(pipeline) => pipeline,
-                    CicadaType::Image(image) => Pipeline {
+                let pipeline = match serde_json::from_str::<KatoaType>(&out)? {
+                    KatoaType::Pipeline(pipeline) => pipeline,
+                    KatoaType::Image(image) => Pipeline {
                         jobs: vec![image],
                         ..Default::default()
                     },
@@ -463,8 +464,8 @@ impl Commands {
 
                 // Check if we should run this pipeline based on the git event
                 match (
-                    std::env::var("CICADA_GIT_EVENT"),
-                    std::env::var("CICADA_BASE_REF"),
+                    std::env::var("KATOA_GIT_EVENT"),
+                    std::env::var("KATOA_BASE_REF"),
                 ) {
                     (Ok(git_event), Ok(base_ref)) => match pipeline.on {
                         Some(job::Trigger::Options { push, pull_request }) => match &*git_event {
@@ -502,7 +503,7 @@ impl Commands {
                         None => {}
                     },
                     (Ok(_), Err(_)) | (Err(_), Ok(_)) => {
-                        anyhow::bail!("CICADA_GIT_EVENT and CICADA_BASE_REF must be set together")
+                        anyhow::bail!("KATOA_GIT_EVENT and KATOA_BASE_REF must be set together")
                     }
                     (Err(_), Err(_)) => {}
                 }
@@ -534,7 +535,7 @@ impl Commands {
                 let inspect_output = Command::new(oci_backend.as_str())
                     .args([
                         "inspect",
-                        "cicada-buildkitd",
+                        "katoa-buildkitd",
                         "--type",
                         "container",
                         "--format",
@@ -551,7 +552,7 @@ impl Commands {
                         info!("Starting buildkitd container...\n");
 
                         Command::new(oci_backend.as_str())
-                            .args(["start", "cicada-buildkitd"])
+                            .args(["start", "katoa-buildkitd"])
                             .status()
                             .await?;
 
@@ -565,7 +566,7 @@ impl Commands {
                             "run",
                             "-d",
                             "--name",
-                            "cicada-buildkitd",
+                            "katoa-buildkitd",
                             "--privileged",
                             &format!("docker.io/moby/buildkit:v{BUILDKIT_VERSION}"),
                         ])
@@ -732,7 +733,7 @@ impl Commands {
                                 pipeline_name.clone(),
                                 project_directory.clone(),
                                 all_secrets.clone(),
-                                cicada_image.clone(),
+                                katoa_image.clone(),
                                 buildctl_exe.clone(),
                                 no_cache,
                                 gh_action_cache,
@@ -792,16 +793,16 @@ impl Commands {
                 #[cfg(feature = "self-update")]
                 check_for_update().await;
 
-                let cicada_dir = PathBuf::from(".cicada");
+                let katoa_dir = PathBuf::from(".katoa");
 
-                if cicada_dir.exists() {
+                if katoa_dir.exists() {
                     anyhow::bail!(
-                        "Cicada directory already exists, run {} to create a new pipeline",
-                        "cicada new".bold()
+                        "Katoa directory already exists, run {} to create a new pipeline",
+                        "katoa new".bold()
                     );
                 }
 
-                std::fs::create_dir(&cicada_dir)?;
+                std::fs::create_dir(&katoa_dir)?;
 
                 let pipeline_name = match pipeline {
                     Some(pipeline) => pipeline,
@@ -811,7 +812,7 @@ impl Commands {
                 }
                 .replace(['\\', '/', '.', ' '], "-");
 
-                let pipeline_path = cicada_dir.join(format!("{pipeline_name}.ts"));
+                let pipeline_path = katoa_dir.join(format!("{pipeline_name}.ts"));
 
                 if pipeline_path.exists() {
                     error!("Pipeline already exists: {}", pipeline_path.display());
@@ -875,13 +876,13 @@ impl Commands {
                         // Check for the .vscode/settings.json file
                         let settings_path = PathBuf::from(".vscode/settings.json");
                         if settings_path.exists() {
-                            info!("Add the following to your VSCode settings file: \"deno.enablePaths\": [\".cicada\"]");
+                            info!("Add the following to your VSCode settings file: \"deno.enablePaths\": [\".katoa\"]");
                         } else {
                             info!("Creating VSCode settings file");
                             std::fs::create_dir_all(".vscode")?;
                             tokio::fs::write(
                                 &settings_path,
-                                "{\n  \"deno.enablePaths\": [\".cicada\"]\n}",
+                                "{\n  \"deno.enablePaths\": [\".katoa\"]\n}",
                             )
                             .await?;
                         }
@@ -897,22 +898,22 @@ impl Commands {
                 }
 
                 info!(
-                    "\n{} Initialized Cicada pipeline: {}\n{} Run it with: {}\n ",
+                    "\n{} Initialized Katoa pipeline: {}\n{} Run it with: {}\n ",
                     " ◥◣ ▲ ◢◤ ".fg_rgb::<145, 209, 249>(),
                     pipeline_path.display().bold(),
                     "  ◸ ▽ ◹  ".fg_rgb::<145, 209, 249>(),
-                    format!("cicada run {pipeline_name}").bold(),
+                    format!("katoa run {pipeline_name}").bold(),
                 );
             }
             Commands::New { pipeline } => {
                 #[cfg(feature = "self-update")]
                 check_for_update().await;
 
-                // Check if cicada is initialized
-                let Ok(dir) = resolve_cicada_dir() else {
+                // Check if katoa is initialized
+                let Ok(dir) = resolve_katoa_dir() else {
                     anyhow::bail!(
-                        "Cicada is not initialized in this directory. Run {} to initialize it.",
-                        "cicada init".bold()
+                        "Katoa is not initialized in this directory. Run {} to initialize it.",
+                        "katoa init".bold()
                     );
                 };
 
@@ -925,11 +926,11 @@ impl Commands {
                 tokio::fs::write(&pipeline_path, &*TEMPLATES[0]).await?;
 
                 info!(
-                    "\n{} Initialized Cicada pipeline: {}\n{} Run it with: {}\n",
+                    "\n{} Initialized Katoa pipeline: {}\n{} Run it with: {}\n",
                     " ◥◣ ▲ ◢◤ ".fg_rgb::<145, 209, 249>(),
                     pipeline_path.display().bold(),
                     "  ◸ ▽ ◹  ".fg_rgb::<145, 209, 249>(),
-                    format!("cicada run {pipeline}").bold(),
+                    format!("katoa run {pipeline}").bold(),
                 );
             }
             #[cfg(feature = "self-update")]
@@ -961,7 +962,7 @@ impl Commands {
                 generate(
                     shell,
                     &mut Commands::command(),
-                    "cicada",
+                    "katoa",
                     &mut std::io::stdout(),
                 );
             }
@@ -971,7 +972,7 @@ impl Commands {
                 clap_complete::generate(
                     clap_complete_fig::Fig,
                     &mut Commands::command(),
-                    "cicada",
+                    "katoa",
                     &mut std::io::stdout(),
                 )
             }
@@ -1037,7 +1038,7 @@ async fn main() -> ExitCode {
         return ExitCode::FAILURE;
     }
 
-    if std::env::var_os("CICADA_FORCE_COLOR").is_some() || std::env::var_os("CI").is_some() {
+    if std::env::var_os("KATOA_FORCE_COLOR").is_some() || std::env::var_os("CI").is_some() {
         owo_colors::set_override(true);
     }
 
@@ -1064,7 +1065,7 @@ async fn main() -> ExitCode {
     match res {
         Ok(_) => ExitCode::SUCCESS,
         Err(err) => {
-            if std::env::var_os("CICADA_DEBUG").is_some() {
+            if std::env::var_os("KATOA_DEBUG").is_some() {
                 error!("{err:#?}");
             } else {
                 error!("{err}");

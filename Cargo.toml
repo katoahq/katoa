@@ -1,13 +1,13 @@
 [workspace]
-resolver = "2"
-members = ["crates/*"]
+  resolver = "2"
+  members = ["crates/*"]
 
-[workspace.package]
-edition = "2021"
-homepage = "https://github.com/cicadahq/cicada"
-repository = "https://github.com/cicadahq/cicada"
-license = "MIT"
-authors = ["Cicada Team"]
+  [workspace.package]
+    edition = "2021"
+    homepage = "https://github.com/katoahq/katoa"
+    repository = "https://github.com/katoahq/katoa"
+    license = "MIT"
+    authors = ["Cicada Team", "Katoa Team"]
 
 [profile.release]
-lto = true
+  lto = true

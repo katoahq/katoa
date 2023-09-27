@@ -46,7 +46,7 @@ impl DebugCommand {
         match self {
             DebugCommand::DaemonInfo { json, oci_args } => {
                 let mut client =
-                    Client::connect(oci_args.oci_backend(), "cicada-buildkitd".into()).await?;
+                    Client::connect(oci_args.oci_backend(), "katoa-buildkitd".into()).await?;
                 let info = client.info().await?;
 
                 if json {
@@ -75,7 +75,7 @@ impl DebugCommand {
             }
             DebugCommand::DiskUsage { json, oci_args } => {
                 let mut client =
-                    Client::connect(oci_args.oci_backend(), "cicada-buildkitd".into()).await?;
+                    Client::connect(oci_args.oci_backend(), "katoa-buildkitd".into()).await?;
                 let mut usage = client.disk_usage().await?;
 
                 usage.record.sort_by_key(|r| -r.size);
@@ -146,7 +146,7 @@ impl DebugCommand {
             }
             DebugCommand::Workers { oci_args, json } => {
                 let mut client =
-                    Client::connect(oci_args.oci_backend(), "cicada-buildkitd".into()).await?;
+                    Client::connect(oci_args.oci_backend(), "katoa-buildkitd".into()).await?;
                 let workers = client.list_workers().await?;
 
                 if json {
@@ -249,11 +249,11 @@ impl DebugCommand {
                 let definition: Definition = Definition::new(command.output(0));
 
                 let mut client =
-                    Client::connect(OciBackend::Docker, "cicada-buildkitd".into()).await?;
+                    Client::connect(OciBackend::Docker, "katoa-buildkitd".into()).await?;
 
                 let session = client
                     .session(SessionOptions {
-                        name: "cicada".into(),
+                        name: "katoa".into(),
                         local: [("local".into(), ".".into())].into_iter().collect(),
                         secrets: vec![("abc".into(), SecretSource::Memory("abc".into()))]
                             .into_iter()

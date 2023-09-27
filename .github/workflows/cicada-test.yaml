@@ -11,5 +11,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: cicadahq/setup-cicada@v1
-      - run: cicada run test
+      - uses: katoahq/setup-katoa@v1
+      - run: katoa run test

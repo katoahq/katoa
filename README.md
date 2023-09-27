@@ -10,29 +10,21 @@ Katoa is a community fork of Cidada, a tool created by Fig which was sunset in l
 Test a pipeline on your local device in < 2 minutes
 
 ```bash
-# Install Cicada
-npm install -g @cicadahq/cicada (NOT WORKING)
+# Install Katoa
+npm install -g @katoahq/katoa (NOT WORKING)
 
-# Set up Cicada in a project
+# Set up Katoa in a project
 cd path/to/my/project
-cicada init
+katoa init
 
 # Test your pipeline locally
-cicada run <my-pipeline>
+katoa run <my-pipeline>
 ```
-
-## Cloud (NOT WORKING YET)
-
-Deploy your pipeline to our cloud so it runs on every PR/commit:
-
-1. Sign up at [cicada.build/dashboard](https://cicada.build/dashboard)
-2. Link your repository using our GitHub integration
-3. Push your pipeline to GitHub
 
 ## Example
 
 ```typescript
-import { Job, Pipeline } from "https://deno.land/x/cicada/mod.ts";
+import { Job, Pipeline } from "https://deno.land/x/katoa/mod.ts";
 
 const job = new Job({
   name: "My First Job",
@@ -71,15 +63,8 @@ Check out [katoahq/modules](https://github.com/katoahq/modules)
 
 ## Support
 
-👉 **Docs** (NOT WORKING): [cicada.build/docs](https://cicada.build/docs)
+👉 **Docs** (WIP): [docs](https://github.com/katoahq/docs)
 
-👉 **Typescript API** (NOT WORKING): [deno.land/x/cicada](https://deno.land/x/cicada/mod.ts)
+👉 **Typescript API** (NOT WORKING): [deno.land/x/katoa](https://deno.land/x/katoa/mod.ts)
 
 👉 **Discord**: [Discord](https://discord.gg/7qNBeGmB5A)
-
-## Enterprise (NOT WORKING)
-
-Need self-hosted runners, advanced security and compliance, custom integrations,
-or something else? We can help!
-
-Please email [brendan@fig.io](mailto:brendan@fig.io)

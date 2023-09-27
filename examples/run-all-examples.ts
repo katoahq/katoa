@@ -4,22 +4,22 @@ import { extname, join } from "https://deno.land/std@0.182.0/path/mod.ts";
 
 for (const examples of Deno.readDirSync(".")) {
   if (!examples.isDirectory) continue;
-  const cicadaDir = join(examples.name, ".cicada");
+  const katoaDir = join(examples.name, ".katoa");
 
-  for (const pipeline of Deno.readDirSync(cicadaDir)) {
+  for (const pipeline of Deno.readDirSync(katoaDir)) {
     if (extname(pipeline.name) !== ".ts") continue;
 
-    const path = join(cicadaDir, pipeline.name);
+    const path = join(katoaDir, pipeline.name);
     console.log(path);
 
     const child = new Deno.Command("cargo", {
       args: [
         "run",
         "-p",
-        "cicada-cli",
+        "katoa-cli",
         "--",
         "run",
-        "--cicada-dockerfile",
+        "--katoa-dockerfile",
         "../docker/bin.Dockerfile",
         path,
       ],

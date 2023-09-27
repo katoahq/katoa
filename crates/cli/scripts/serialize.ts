@@ -7,8 +7,8 @@ import {
   Step,
   StepFn,
   Trigger,
-} from "https://deno.land/x/cicada/mod.ts";
-import { Image } from "https://deno.land/x/cicada/experimental/image.ts";
+} from "https://deno.land/x/katoa/mod.ts";
+import { Image } from "https://deno.land/x/katoa/experimental/image.ts";
 
 const mapCache = (
   cache: FilePath | CacheDirectoryOptions,

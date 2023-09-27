@@ -1,21 +1,21 @@
 {
-  "name": "@cicadahq/cicada",
+  "name": "@katoahq/katoa",
   "version": "0.1.50",
-  "description": "Cicada is a next-generation CI framework using TypeScript",
+  "description": "Katoa is a next-generation CI framework using TypeScript",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cicadahq/cicada.git"
+    "url": "git+https://github.com/katoahq/katoa.git"
   },
   "bugs": {
-    "url": "https://github.com/cicadahq/cicada/issues"
+    "url": "https://github.com/katoahq/katoa/issues"
   },
-  "homepage": "https://cicada.build",
+  "homepage": "https://github.com/katoahq",
   "license": "MIT",
   "scripts": {
     "install": "node install.js"
   },
   "bin": {
-    "cicada": "./bin/cicada"
+    "katoa": "./bin/katoa"
   },
-  "author": "Cicada team"
+  "author": "Katoa team"
 }

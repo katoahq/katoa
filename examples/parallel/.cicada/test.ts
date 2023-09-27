@@ -1,4 +1,4 @@
-import { Job, Pipeline } from "https://deno.land/x/cicada/mod.ts";
+import { Job, Pipeline } from "https://deno.land/x/katoa/mod.ts";
 
 const job00 = new Job({
   image: "ubuntu:22.04",

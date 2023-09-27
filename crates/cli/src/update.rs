@@ -5,7 +5,7 @@ use tracing::info;
 #[cfg(target_env = "musl")]
 compile_error!("Musl does not support self-update");
 
-/// Check for a new version of Cicada and print a message if there is one
+/// Check for a new version of Katoa and print a message if there is one
 pub async fn check_for_update() {
     use std::time::SystemTime;
 
@@ -17,11 +17,11 @@ pub async fn check_for_update() {
         let bold_yellow = owo_colors::Style::new().bold().yellow();
         info!(
             "\n{}{}\n{}{}\n",
-            "A new version of Cicada is available: "
+            "A new version of Katoa is available: "
                 .if_supports_color(Stream::Stdout, |s| s.yellow()),
             version.if_supports_color(Stream::Stdout, |s| s.style(bold_yellow)),
             "Run to update: ".if_supports_color(Stream::Stdout, |s| s.yellow()),
-            "cicada update".if_supports_color(Stream::Stdout, |s| s.style(bold_yellow))
+            "katoaa update".if_supports_color(Stream::Stdout, |s| s.style(bold_yellow))
         );
     };
 
@@ -91,18 +91,18 @@ pub async fn check_for_update() {
 
 pub fn self_update_release() -> anyhow::Result<Box<dyn ReleaseUpdate>> {
     let bin_name = match (std::env::consts::OS, std::env::consts::ARCH) {
-        ("linux", "x86_64") => "cicada-x86_64-unknown-linux-gnu.tar.gz",
-        ("macos", "x86_64") => "cicada-x86_64-apple-darwin.tar.gz",
-        ("macos", "aarch64") => "cicada-aarch64-apple-darwin.tar.gz",
-        ("windows", "x86_64") => "cicada-x86_64-pc-windows-msvc.zip",
+        ("linux", "x86_64") => "katoa-x86_64-unknown-linux-gnu.tar.gz",
+        ("macos", "x86_64") => "katoa-x86_64-apple-darwin.tar.gz",
+        ("macos", "aarch64") => "katoa-aarch64-apple-darwin.tar.gz",
+        ("windows", "x86_64") => "katoa-x86_64-pc-windows-msvc.zip",
         _ => anyhow::bail!("Unsupported OS"),
     };
 
     let release_update = self_update::backends::github::Update::configure()
-        .repo_owner("cicadahq")
-        .repo_name("cicada")
+        .repo_owner("katoahq")
+        .repo_name("katoa")
         .bin_name(bin_name)
-        .bin_path_in_archive("cicada")
+        .bin_path_in_archive("katoa")
         .show_download_progress(true)
         .current_version(self_update::cargo_crate_version!())
         .show_download_progress(true)

@@ -1,12 +1,12 @@
-import { Pipeline } from "https://deno.land/x/cicada/mod.ts";
-import { Image } from "https://deno.land/x/cicada/experimental/image.ts";
+import { Pipeline } from "https://deno.land/x/katoa/mod.ts";
+import { Image } from "https://deno.land/x/katoa/experimental/image.ts";
 
-const moduleFile = Deno.env.get("CICADA_PIPELINE_FILE");
+const moduleFile = Deno.env.get("KATOA_PIPELINE_FILE");
 if (!moduleFile) {
   console.error(
     "%cError:",
     "color: red; font-weight: bold;",
-    "CICADA_PIPELINE_FILE not set",
+    "KATOA_PIPELINE_FILE not set",
   );
   Deno.exit(1);
 }

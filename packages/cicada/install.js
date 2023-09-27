@@ -2,11 +2,11 @@ const fs = require("fs");
 const zlib = require("zlib");
 const https = require("https");
 const {
-  CICADA_BINARY_PATH,
+  KATOA_BINARY_PATH,
   pkgAndSubpathForCurrentPlatform,
   generateBinPath,
 } = require("./node-platform");
-const CICADA_VERSION = require("./package.json").version;
+const KATOA_VERSION = require("./package.json").version;
 
 function fetch(url) {
   return new Promise((resolve, reject) => {
@@ -34,7 +34,7 @@ function extractFileFromTarGzip(buffer, subpath) {
     buffer = zlib.unzipSync(buffer);
   } catch (err) {
     throw new Error(
-      `Invalid gzip data in archive: ${(err && err.message) || err}`,
+      `Invalid gzip data in archive: ${(err && err.message) || err}`
     );
   }
   const str = (i, n) =>
@@ -54,33 +54,32 @@ function extractFileFromTarGzip(buffer, subpath) {
 }
 
 async function install() {
-  if (CICADA_BINARY_PATH) {
+  if (KATOA_BINARY_PATH) {
     return;
   }
 
   const pkg = pkgAndSubpathForCurrentPlatform();
 
-  console.error(`[cicada] Fetching package "${pkg}" from GitHub`);
+  console.error(`[katoa] Fetching package "${pkg}" from GitHub`);
 
   const binPath = generateBinPath();
-  const url =
-    `https://github.com/cicadahq/cicada/releases/download/v${CICADA_VERSION}/${pkg}.tar.gz`;
+  const url = `https://github.com/katoahq/katoa/releases/download/v${KATOA_VERSION}/${pkg}.tar.gz`;
 
   try {
     const tarGzip = await fetch(url);
-    fs.writeFileSync(binPath, extractFileFromTarGzip(tarGzip, "cicada"));
+    fs.writeFileSync(binPath, extractFileFromTarGzip(tarGzip, "katoa"));
     fs.chmodSync(binPath, 0o755);
   } catch (e) {
     console.error(
-      `[cicada] Failed to download ${JSON.stringify(url)}: ${
+      `[katoa] Failed to download ${JSON.stringify(url)}: ${
         (e && e.message) || e
-      }`,
+      }`
     );
     throw e;
   }
 }
 
 install().then(() => {
-  console.log("[cicada] CLI successfully installed");
+  console.log("[katoa] CLI successfully installed");
   process.exit(0);
 });

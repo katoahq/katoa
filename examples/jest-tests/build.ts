@@ -1,7 +1,7 @@
 import {
   Job,
   Pipeline,
-} from "https://raw.githubusercontent.com/cicadahq/cicada/main/mod.ts";
+} from "https://raw.githubusercontent.com/katoahq/katoa/main/mod.ts";
 
 const joba = new Job({
   image: "docker",

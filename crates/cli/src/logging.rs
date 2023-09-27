@@ -128,8 +128,8 @@ impl<S: Subscriber + for<'a> LookupSpan<'a>> Layer<S> for CustomFormatLayer {
 }
 
 pub fn logging_init() -> Result<()> {
-    let log_type = std::env::var("CICADA_LOG_TYPE");
-    let log_json = std::env::var_os("CICADA_LOG_JSON").is_some();
+    let log_type = std::env::var("KATOA_LOG_TYPE");
+    let log_json = std::env::var_os("KATOA_LOG_JSON").is_some();
 
     if log_type.as_deref() == Ok("json") || log_json {
         tracing::subscriber::set_global_default(SubscriberBuilder::default().json().finish())?;

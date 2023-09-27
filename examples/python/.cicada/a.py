@@ -108,5 +108,5 @@ class Pipeline:
 
 
 def inJob() -> bool:
-    val = os.environ.get("CICADA_JOB")
+    val = os.environ.get("KATOA_JOB")
     return val is not None and val != ""

@@ -290,7 +290,7 @@ pub async fn deno_exe() -> anyhow::Result<PathBuf> {
     return Ok(exe);
 
     #[cfg(not(feature = "managed-bins"))]
-    return Err(anyhow::anyhow!("Cicada requires Deno {DENO_VERSION_REQ} to run. Please install it using one of the methods on https://deno.land/manual/getting_started/installation"));
+    return Err(anyhow::anyhow!("Katoa requires Deno {DENO_VERSION_REQ} to run. Please install it using one of the methods on https://deno.land/manual/getting_started/installation"));
 }
 
 pub async fn buildctl_exe() -> anyhow::Result<PathBuf> {
@@ -309,7 +309,7 @@ pub async fn buildctl_exe() -> anyhow::Result<PathBuf> {
 
     #[cfg(not(feature = "managed-bins"))]
     return Err(anyhow::anyhow!(
-        "Cicada requires buildctl {BUILDCTL_VERSION_REQ} to run."
+        "Katoa requires buildctl {BUILDCTL_VERSION_REQ} to run."
     ));
 }
 
