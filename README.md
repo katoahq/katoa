@@ -1,15 +1,17 @@
-# Cicada
+# Katoa
 
-> **[Cicada](https://cicada.build)**: Write CI/CD pipelines in TypeScript, test
+Katoa is a community fork of Cidada, a tool created by Fig which was sunset in late 2023 following acquisition by AWS. This fork and the underlying software are both very young, bugs and transitional issues are to be expected.
+
+> **Katoa**: Write CI/CD pipelines in TypeScript, test
 > them locally
 
-## Quickstart
+## Quickstart (NOT WORKING YET)
 
 Test a pipeline on your local device in < 2 minutes
 
 ```bash
 # Install Cicada
-npm install -g @cicadahq/cicada 
+npm install -g @cicadahq/cicada (NOT WORKING)
 
 # Set up Cicada in a project
 cd path/to/my/project
@@ -18,6 +20,8 @@ cicada init
 # Test your pipeline locally
 cicada run <my-pipeline>
 ```
+
+## Cloud (NOT WORKING YET)
 
 Deploy your pipeline to our cloud so it runs on every PR/commit:
 
@@ -61,19 +65,19 @@ export default new Pipeline([job]);
 - **Steps**: A step is either a shell script or Deno/TypeScript script that
   executes in its parent job’s container
 
-## 3rd party modules
+## 3rd party modules (PROBABLY NOT WORKING)
 
-Check out [cicadahq/modules](https://github.com/cicadahq/modules)
+Check out [katoahq/modules](https://github.com/katoahq/modules)
 
 ## Support
 
-👉 **Docs**: [cicada.build/docs](https://cicada.build/docs)
+👉 **Docs** (NOT WORKING): [cicada.build/docs](https://cicada.build/docs)
 
-👉 **Typescript API**: [deno.land/x/cicada](https://deno.land/x/cicada/mod.ts)
+👉 **Typescript API** (NOT WORKING): [deno.land/x/cicada](https://deno.land/x/cicada/mod.ts)
 
-👉 **Discord**: [cicada.build/discord](https://discord.gg/g2PRPm4u4Y)
+👉 **Discord**: [Discord](https://discord.gg/7qNBeGmB5A)
 
-## Enterprise
+## Enterprise (NOT WORKING)
 
 Need self-hosted runners, advanced security and compliance, custom integrations,
 or something else? We can help!
