@@ -201,8 +201,6 @@ jobs:
     name: Release to NPM
     runs-on: ubuntu-latest
     needs: docker-release
-    # TODO: get this working
-    if: false
     steps:
       - uses: actions/checkout@master
       - name: Publish to NPM
