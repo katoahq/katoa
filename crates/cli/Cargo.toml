@@ -65,7 +65,7 @@ sentry = { version = "0.31.0", default-features = false, features = [
 serde = { version = "1.0.183", features = ["derive"] }
 serde_json = "1.0.105"
 sha2 = "0.10.7"
-shlex = "1.1.0"
+shlex = "1.2.0"
 tar = { version = "0.4.40", optional = true }
 tempfile = "3.7.1"
 time = { version = "0.3.25", features = ["serde"] }
