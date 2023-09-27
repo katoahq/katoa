@@ -377,8 +377,7 @@ impl Commands {
 
                 let katoa_image = if let Some(katoa_dockerfile) = katoa_dockerfile {
                     let tag = format!(
-                        // FIXME: reference
-                        "docker.io/katoahq/katoa-bin:{}-dev",
+                        "ghcr.io/katoahq/katoa-bin:{}-dev",
                         env!("CARGO_PKG_VERSION")
                     );
 

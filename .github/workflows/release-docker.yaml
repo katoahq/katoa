@@ -36,4 +36,4 @@ jobs:
           context: ./docker
           file: ./docker/bin.Dockerfile
           push: true
-          tags: katoahq/katoa-bin:${{ steps.version.outputs.no_prefix_version }},katoahq/katoa-bin:latest
+          tags: ghcr.io/katoahq/katoa-bin:${{ steps.version.outputs.no_prefix_version }},ghcr.io/katoahq/katoa-bin:latest

@@ -322,10 +322,8 @@ impl JobResolved {
 
         let katoa_image = match katoa_image {
             Some(katoa_image) => Image::local(katoa_image.into()),
-
-            // FIXME: reference
             None => Image::new(format!(
-                "docker.io/katoahq/katoa-bin:{}",
+                "ghcr.io/katoahq/katoa-bin:{}",
                 env!("CARGO_PKG_VERSION")
             )),
         }
