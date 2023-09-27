@@ -1,4 +1,4 @@
-import { Job, Pipeline } from "https://deno.land/x/cicada/mod.ts";
+import { Job, Pipeline } from "https://deno.land/x/katoa/mod.ts";
 
 const jobs: Job[] = ["bionic", "focal", "jammy"].map((
   ubuntuRelease,

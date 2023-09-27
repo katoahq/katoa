@@ -1,18 +1,18 @@
-# Maintainer: Grant <grant@fig.io>
+# Maintainer: Katoa Team <katoa@katoa.build>
 
-pkgname="cicada-bin"
+pkgname="katoa-bin"
 pkgver="${version}"
 pkgrel="1"
 pkgdesc="Write CI/CD Pipelines in TypeScript"
 arch=("x86_64")
-url="https://cicada.build"
+url="https://github.com/katoahq"
 license=("MIT")
 depends=("docker" "deno" "buildkit")
-provides=("cicada")
-conflicts=("cicada")
+provides=("katoa")
+conflicts=("katoa")
 source=(
-    "$pkgname-$pkgver.tgz::https://github.com/cicadahq/cicada/releases/download/v${pkgver}/cicada-x86_64-unknown-linux-gnu.tar.gz"
-    "https://raw.githubusercontent.com/cicadahq/cicada/v${pkgver}/LICENSE"
+    "$pkgname-$pkgver.tgz::https://github.com/katoahq/katoa/releases/download/v${pkgver}/katoa-x86_64-unknown-linux-gnu.tar.gz"
+    "https://raw.githubusercontent.com/katoahq/katoa/v${pkgver}/LICENSE"
 )
 sha256sums=(
     "${sha256sum}"
@@ -21,6 +21,6 @@ sha256sums=(
 
 package() {
     mkdir -p "$pkgdir/usr/bin"
-    install -m755 cicada "$pkgdir/usr/bin"
-    install -Dm644 LICENSE "$pkgdir/usr/share/licenses/cicada/LICENSE"
+    install -m755 katoa "$pkgdir/usr/bin"
+    install -Dm644 LICENSE "$pkgdir/usr/share/licenses/katoa/LICENSE"
 }

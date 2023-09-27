@@ -17,6 +17,8 @@ jobs:
   release:
     name: Release ${{ matrix.target }}
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
     strategy:
       matrix:
         include:
@@ -82,10 +84,10 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: build
-          args: -p cicada-cli --release --target ${{ matrix.target }} -F ${{ matrix.features }}
+          args: -p katoa-cli --release --target ${{ matrix.target }} -F ${{ matrix.features }}
         env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}
+          # SENTRY_AUTH_TOKEN: \$\{{ secrets.SENTRY_AUTH_TOKEN }}
+          # SEGMENT_WRITE_KEY: \$\{{ secrets.SEGMENT_WRITE_KEY }}
           CC_aarch64_unknown_linux_musl: clang
           AR_aarch64_unknown_linux_musl: llvm-ar
           CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUSTFLAGS: -Clink-self-contained=yes -Clinker=rust-lld
@@ -93,21 +95,21 @@ jobs:
       - name: Upload release (linux)
         if: matrix.target == 'x86_64-unknown-linux-gnu' || matrix.target == 'x86_64-unknown-linux-musl' || matrix.target == 'aarch64-unknown-linux-musl'
         env:
-          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           version=${{ steps.version.outputs.version }}
           echo "version=$version"
 
           mkdir out
-          mv target/${{ matrix.target }}/release/cicada-cli out/cicada
+          mv target/${{ matrix.target }}/release/katoa-cli out/katoa
 
           for archive in ${{ matrix.archive }}; do
-            OUT_FILE=cicada-${{ matrix.target }}.$archive
+            OUT_FILE=katoa-${{ matrix.target }}.$archive
             if [[ "$archive" == "tar.gz" ]]; then
-              tar -czf $OUT_FILE -C out cicada
+              tar -czf $OUT_FILE -C out katoa
             fi 
             if [[ "$archive" == "tar.zst" ]]; then
-              tar -cJf $OUT_FILE -C out cicada
+              tar -cJf $OUT_FILE -C out katoa
             fi
             gh release upload $version $OUT_FILE
           done
@@ -115,22 +117,22 @@ jobs:
       - name: Upload release (macos)
         if: matrix.target == 'x86_64-apple-darwin' || matrix.target == 'aarch64-apple-darwin'
         env:
-          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           version=${{ steps.version.outputs.version }}
           echo "version=$version"
 
           mkdir out
-          mv target/${{ matrix.target }}/release/cicada-cli out/cicada
+          mv target/${{ matrix.target }}/release/katoa-cli out/katoa
 
           for archive in ${{ matrix.archive }}; do
             if [[ "$archive" == "zip" ]]; then
-              OUT_FILE=cicada-${{ matrix.target }}.$archive
-              zip $OUT_FILE out/cicada
+              OUT_FILE=katoa-${{ matrix.target }}.$archive
+              zip $OUT_FILE out/katoa
             fi
             if [[ "$archive" == "tar.gz" ]]; then
-              OUT_FILE=cicada-${{ matrix.target }}.$archive
-              tar -czf $OUT_FILE -C out cicada
+              OUT_FILE=katoa-${{ matrix.target }}.$archive
+              tar -czf $OUT_FILE -C out katoa
             fi
             gh release upload $version $OUT_FILE
           done
@@ -138,23 +140,23 @@ jobs:
       - name: Upload release (windows)
         if: matrix.target == 'x86_64-pc-windows-msvc'
         env:
-          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
           version=${{ steps.version.outputs.version }}
           echo "version=$version"
 
           mkdir out
-          mv target/${{ matrix.target }}/release/cicada-cli.exe out/cicada.exe
+          mv target/${{ matrix.target }}/release/katoa-cli.exe out/katoa.exe
 
           for archive in ${{ matrix.archive }}; do
             if [[ "$archive" == "zip" ]]; then
-              OUT_FILE=cicada-${{ matrix.target }}.$archive
-              7z a $OUT_FILE out/cicada
+              OUT_FILE=katoa-${{ matrix.target }}.$archive
+              7z a $OUT_FILE out/katoa
             fi
             if [[ "$archive" == "tar.gz" ]]; then
-              OUT_FILE=cicada-${{ matrix.target }}.$archive
-              tar -czf $OUT_FILE -C out cicada
+              OUT_FILE=katoa-${{ matrix.target }}.$archive
+              tar -czf $OUT_FILE -C out katoa
             fi
             gh release upload $version $OUT_FILE
           done
@@ -181,30 +183,33 @@ jobs:
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-      - name: Login to Docker Hub
+      - name: Log into ghcr
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
           context: ./docker
           file: ./docker/bin.Dockerfile
           push: true
-          tags: cicadahq/cicada-bin:${{ steps.version.outputs.no_prefix_version }},cicadahq/cicada-bin:latest    
+          tags: ghcr.io/katoahq/katoa-bin:${{ steps.version.outputs.no_prefix_version }},ghcr.io/katoahq/katoa-bin:latest
 
   npm-release:
     name: Release to NPM
     runs-on: ubuntu-latest
     needs: docker-release
+    # TODO: get this working
+    if: false
     steps:
       - uses: actions/checkout@master
       - name: Publish to NPM
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          cd packages/cicada
+          cd packages/katoa
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
           npm publish
 
@@ -224,22 +229,24 @@ jobs:
             version=${{ github.ref_name }}
           fi
           echo "version=$version" >> $GITHUB_OUTPUT
-      - name: Download cicada-x86_64-unknown-linux-gnu.tar.gz
+      - name: Download katoa-x86_64-unknown-linux-gnu.tar.gz
         run: |
-          curl -L -o cicada-x86_64-unknown-linux-gnu.tar.gz https://github.com/cicadahq/cicada/releases/download/${{ steps.version.outputs.version }}/cicada-x86_64-unknown-linux-gnu.tar.gz
+          curl -L -o katoa-x86_64-unknown-linux-gnu.tar.gz https://github.com/katoahq/katoa/releases/download/${{ steps.version.outputs.version }}/katoa-x86_64-unknown-linux-gnu.tar.gz
       - name: Generate PKGBUILD
         run: |
-          mkdir -p aur/cicada-bin
+          mkdir -p aur/katoa-bin
           export tag=${GITHUB_REF#refs/*/}
           export version=${tag:1}
-          export sha256sum=$(sha256sum cicada-x86_64-unknown-linux-gnu.tar.gz | awk '{print $1}')
-          envsubst '${version},${sha256sum}' < aur/PKGBUILD > aur/cicada-bin/PKGBUILD
-          cat aur/cicada-bin/PKGBUILD
-      - name: Publish cicada-bin to the AUR
+          export sha256sum=$(sha256sum katoa-x86_64-unknown-linux-gnu.tar.gz | awk '{print $1}')
+          envsubst '${version},${sha256sum}' < aur/PKGBUILD > aur/katoa-bin/PKGBUILD
+          cat aur/katoa-bin/PKGBUILD
+      - name: Publish katoa-bin to the AUR
+        # TODO: Uncomment when ready to publish
+        if: false
         uses: superfly/aur-releaser@ba29a0a809d7221713a104f9c9a23c34ee5b0742
         with:
-          pkgname: cicada-bin
-          pkgbuild: ./aur/cicada-bin/PKGBUILD
+          pkgname: katoa-bin
+          pkgbuild: ./aur/katoa-bin/PKGBUILD
           commit_username: Grant
           commit_email: grant@fig.io
           ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}

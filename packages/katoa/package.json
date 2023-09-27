@@ -1,0 +1,21 @@
+{
+  "name": "@katoahq/katoa",
+  "version": "0.1.50",
+  "description": "Katoa is a next-generation CI framework using TypeScript",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/katoahq/katoa.git"
+  },
+  "bugs": {
+    "url": "https://github.com/katoahq/katoa/issues"
+  },
+  "homepage": "https://github.com/katoahq",
+  "license": "MIT",
+  "scripts": {
+    "install": "node install.js"
+  },
+  "bin": {
+    "katoa": "./bin/katoa"
+  },
+  "author": "Katoa team"
+}

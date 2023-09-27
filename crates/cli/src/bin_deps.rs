@@ -166,7 +166,7 @@ pub async fn download_deno_exe() -> anyhow::Result<PathBuf> {
 
 #[cfg(feature = "managed-bins")]
 fn buildctl_download_link() -> anyhow::Result<String> {
-    let deno_archive_name = match (std::env::consts::OS, std::env::consts::ARCH) {
+    let buildkit_archive_name = match (std::env::consts::OS, std::env::consts::ARCH) {
         ("linux", "x86_64") => format!("buildkit-v{BUILDCTL_VERSION}.linux-amd64"),
         ("macos", "x86_64") => format!("buildkit-v{BUILDCTL_VERSION}.darwin-amd64"),
         ("macos", "aarch64") => format!("buildkit-v{BUILDCTL_VERSION}.darwin-arm64"),
@@ -175,7 +175,7 @@ fn buildctl_download_link() -> anyhow::Result<String> {
     };
 
     Ok(format!(
-        "https://github.com/moby/buildkit/releases/download/v{BUILDCTL_VERSION}/{deno_archive_name}.tar.gz"
+        "https://github.com/moby/buildkit/releases/download/v{BUILDCTL_VERSION}/{buildkit_archive_name}.tar.gz"
     ))
 }
 
@@ -290,7 +290,7 @@ pub async fn deno_exe() -> anyhow::Result<PathBuf> {
     return Ok(exe);
 
     #[cfg(not(feature = "managed-bins"))]
-    return Err(anyhow::anyhow!("Cicada requires Deno {DENO_VERSION_REQ} to run. Please install it using one of the methods on https://deno.land/manual/getting_started/installation"));
+    return Err(anyhow::anyhow!("Katoa requires Deno {DENO_VERSION_REQ} to run. Please install it using one of the methods on https://deno.land/manual/getting_started/installation"));
 }
 
 pub async fn buildctl_exe() -> anyhow::Result<PathBuf> {
@@ -309,7 +309,7 @@ pub async fn buildctl_exe() -> anyhow::Result<PathBuf> {
 
     #[cfg(not(feature = "managed-bins"))]
     return Err(anyhow::anyhow!(
-        "Cicada requires buildctl {BUILDCTL_VERSION_REQ} to run."
+        "Katoa requires buildctl {BUILDCTL_VERSION_REQ} to run."
     ));
 }
 

@@ -10,7 +10,7 @@ use sha2::{Digest, Sha256};
 pub fn data_path() -> Result<PathBuf> {
     let path = dirs::data_local_dir()
         .context("Could not find data local dir")?
-        .join("cicada");
+        .join("katoa");
     if !path.exists() {
         std::fs::create_dir_all(&path)?;
     }

@@ -1,7 +1,7 @@
-import { CommonImageOptions } from "https://deno.land/x/cicada/mod.ts";
+import { CommonImageOptions } from "https://deno.land/x/katoa/mod.ts";
 
 /**
- * An image that is built by Cicada
+ * An image that is built by Katoa
  */
 export interface ImageOptions extends CommonImageOptions {
   /**

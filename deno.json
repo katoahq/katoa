@@ -1,13 +1,11 @@
 {
   "$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
   "imports": {
-    "https://deno.land/x/cicada/": "./lib/"
+    "https://deno.land/x/katoa/": "./lib/"
   },
   "fmt": {
-    "files": {
-      "exclude": [
-        "target"
-      ]
-    }
+    "exclude": [
+      "target"
+    ]
   }
 }

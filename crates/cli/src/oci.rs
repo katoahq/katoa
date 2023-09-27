@@ -31,7 +31,7 @@ impl From<OciBackendClap> for OciBackend {
 #[derive(Debug, clap::Args)]
 pub struct OciArgs {
     /// The OCI backend to use
-    #[arg(long, default_value_t = OciBackendClap::default(), env = "CICADA_OCI_BACKEND")]
+    #[arg(long, default_value_t = OciBackendClap::default(), env = "KATOA_OCI_BACKEND")]
     pub oci_backend: OciBackendClap,
 }
 
