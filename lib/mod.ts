@@ -19,7 +19,7 @@
  * export default new Pipeline([job]);
  * ```
  *
- * For more information, see the [Katoa documentation](https://github.com/katoahq/docs).
+ * For more information, see the [Katoa documentation](katoahq.github.io/docs/).
  *
  * @module
  */

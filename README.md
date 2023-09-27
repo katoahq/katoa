@@ -64,7 +64,7 @@ Check out [katoahq/modules](https://github.com/katoahq/modules)
 
 ## Support
 
-👉 **Docs** (WIP): [docs](https://github.com/katoahq/docs)
+👉 **Docs**: [docs](katoahq.github.io/docs/)
 
 👉 **Typescript API**: [deno.land/x/katoa](https://deno.land/x/katoa/mod.ts)
 
