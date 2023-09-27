@@ -364,50 +364,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
-name = "katoa-cli"
-version = "0.1.50"
-dependencies = [
- "ahash",
- "anyhow",
- "base64",
- "buildkit-rs",
- "camino",
- "clap",
- "clap_complete",
- "clap_complete_fig",
- "dialoguer",
- "dirs",
- "dotenvy",
- "flate2",
- "futures",
- "humansize",
- "indicatif",
- "oci-spec",
- "once_cell",
- "open",
- "owo-colors",
- "regex",
- "reqwest",
- "self_update",
- "semver",
- "sentry",
- "serde",
- "serde_json",
- "sha2",
- "shlex",
- "tar",
- "tempfile",
- "time",
- "tokio",
- "tracing",
- "tracing-core",
- "tracing-subscriber",
- "url",
- "uuid",
- "zip",
-]
-
-[[package]]
 name = "clap"
 version = "4.3.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1210,6 +1166,50 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c5f195fe497f702db0f318b07fdd68edb16955aed830df8363d837542f8f935a"
 dependencies = [
  "wasm-bindgen",
+]
+
+[[package]]
+name = "katoa-cli"
+version = "0.1.50"
+dependencies = [
+ "ahash",
+ "anyhow",
+ "base64",
+ "buildkit-rs",
+ "camino",
+ "clap",
+ "clap_complete",
+ "clap_complete_fig",
+ "dialoguer",
+ "dirs",
+ "dotenvy",
+ "flate2",
+ "futures",
+ "humansize",
+ "indicatif",
+ "oci-spec",
+ "once_cell",
+ "open",
+ "owo-colors",
+ "regex",
+ "reqwest",
+ "self_update",
+ "semver",
+ "sentry",
+ "serde",
+ "serde_json",
+ "sha2",
+ "shlex",
+ "tar",
+ "tempfile",
+ "time",
+ "tokio",
+ "tracing",
+ "tracing-core",
+ "tracing-subscriber",
+ "url",
+ "uuid",
+ "zip",
 ]
 
 [[package]]

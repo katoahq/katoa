@@ -166,7 +166,7 @@ pub async fn download_deno_exe() -> anyhow::Result<PathBuf> {
 
 #[cfg(feature = "managed-bins")]
 fn buildctl_download_link() -> anyhow::Result<String> {
-    let deno_archive_name = match (std::env::consts::OS, std::env::consts::ARCH) {
+    let buildkit_archive_name = match (std::env::consts::OS, std::env::consts::ARCH) {
         ("linux", "x86_64") => format!("buildkit-v{BUILDCTL_VERSION}.linux-amd64"),
         ("macos", "x86_64") => format!("buildkit-v{BUILDCTL_VERSION}.darwin-amd64"),
         ("macos", "aarch64") => format!("buildkit-v{BUILDCTL_VERSION}.darwin-arm64"),
