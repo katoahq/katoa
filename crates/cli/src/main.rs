@@ -39,7 +39,7 @@ use crate::{
     bin_deps::{buildctl_exe, deno_exe, BUILDKIT_VERSION},
     dag::{invert_graph, topological_sort, Node},
     git::github_repo,
-    job::{KatoaType, InspectInfo, JobResolved, OnFail, Pipeline, TriggerOn},
+    job::{InspectInfo, JobResolved, KatoaType, OnFail, Pipeline, TriggerOn},
 };
 
 // Transform from https://deno.land/x/katoa/mod.ts to https://deno.land/x/katoa@vX.Y.X/mod.ts

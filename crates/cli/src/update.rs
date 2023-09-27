@@ -69,7 +69,8 @@ pub async fn check_for_update() {
             let status = self_update_release()?.get_latest_release()?;
             Ok(status)
         })
-        .await else {
+        .await
+    else {
         return;
     };
 

@@ -284,7 +284,12 @@ impl JobResolved {
         let mut local: Local = Local::new("local".into());
 
         // Try to load excludes from `.katoaignore`, `.cicadaignore`, `.containerignore`, `.dockerignore` in that order
-        for ignore_name in &[".katoaignore", ".cicadaignore", ".containerignore", ".dockerignore"] {
+        for ignore_name in &[
+            ".katoaignore",
+            ".cicadaignore",
+            ".containerignore",
+            ".dockerignore",
+        ] {
             let ignore_path = project_directory.as_ref().join(ignore_name);
             if ignore_path.is_file() {
                 // Read the file, strip comments and empty lines
