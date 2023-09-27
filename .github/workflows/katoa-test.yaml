@@ -11,5 +11,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: katoahq/setup-katoa@v1
+      - uses: katoahq/setup-katoa
       - run: katoa run test
