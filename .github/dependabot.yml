@@ -5,16 +5,16 @@ updates:
     schedule:
       interval: "daily"
     assignees:
-      - "grant0417"
+      - "endigma"
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "daily"
     assignees:
-      - "grant0417"
+      - "endigma"
   - package-ecosystem: "cargo"
     directory: "/"
     schedule:
       interval: "daily"
     assignees:
-      - "grant0417"
+      - "endigma"
