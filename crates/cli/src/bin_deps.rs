@@ -175,7 +175,7 @@ fn buildctl_download_link() -> anyhow::Result<String> {
     };
 
     Ok(format!(
-        "https://github.com/moby/buildkit/releases/download/v{BUILDCTL_VERSION}/{deno_archive_name}.tar.gz"
+        "https://github.com/moby/buildkit/releases/download/v{BUILDCTL_VERSION}/{buildkit_archive_name}.tar.gz"
     ))
 }
 
