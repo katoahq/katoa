@@ -1,9 +1,10 @@
 # Katoa
 
-Katoa is a community fork of Cidada, a tool created by Fig which was sunset in late 2023 following acquisition by AWS. This fork and the underlying software are both very young, bugs and transitional issues are to be expected.
+Katoa is a community fork of Cidada, a tool created by Fig which was sunset in
+late 2023 following acquisition by AWS. This fork and the underlying software
+are both very young, bugs and transitional issues are to be expected.
 
-> **Katoa**: Write CI/CD pipelines in TypeScript, test
-> them locally
+> **Katoa**: Write CI/CD pipelines in TypeScript, test them locally
 
 ## Quickstart (NOT WORKING YET)
 
@@ -65,6 +66,8 @@ Check out [katoahq/modules](https://github.com/katoahq/modules)
 
 👉 **Docs** (WIP): [docs](https://github.com/katoahq/docs)
 
-👉 **Typescript API** (NOT WORKING): [deno.land/x/katoa](https://deno.land/x/katoa/mod.ts)
+👉 **Typescript API** (NOT WORKING):
+
+[deno.land/x/katoa](https://deno.land/x/katoa/mod.ts)
 
 👉 **Discord**: [Discord](https://discord.gg/7qNBeGmB5A)

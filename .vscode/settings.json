@@ -1,6 +1,9 @@
 {
   // Deno
   "deno.enable": true,
+  "[javascript]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  },
   "[typescript]": {
     "editor.defaultFormatter": "denoland.vscode-deno"
   },

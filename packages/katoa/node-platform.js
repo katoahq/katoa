@@ -30,7 +30,7 @@ function generateBinPath() {
   if (KATOA_BINARY_PATH) {
     if (!fs.existsSync(KATOA_BINARY_PATH)) {
       console.warn(
-        `[katoa] Ignoring bad configuration: KATOA_BINARY_PATH=${KATOA_BINARY_PATH}`
+        `[katoa] Ignoring bad configuration: KATOA_BINARY_PATH=${KATOA_BINARY_PATH}.`,
       );
     } else {
       return KATOA_BINARY_PATH;

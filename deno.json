@@ -4,10 +4,8 @@
     "https://deno.land/x/katoa/": "./lib/"
   },
   "fmt": {
-    "files": {
-      "exclude": [
-        "target"
-      ]
-    }
+    "exclude": [
+      "target"
+    ]
   }
 }
