@@ -6,13 +6,13 @@ are both very young, bugs and transitional issues are to be expected.
 
 > **Katoa**: Write CI/CD pipelines in TypeScript, test them locally
 
-## Quickstart (NOT WORKING YET)
+## Quickstart
 
 Test a pipeline on your local device in < 2 minutes
 
 ```bash
 # Install Katoa
-npm install -g @katoahq/katoa (NOT WORKING)
+npm install -g @katoahq/katoa
 
 # Set up Katoa in a project
 cd path/to/my/project
@@ -66,8 +66,6 @@ Check out [katoahq/modules](https://github.com/katoahq/modules)
 
 👉 **Docs** (WIP): [docs](https://github.com/katoahq/docs)
 
-👉 **Typescript API** (NOT WORKING):
-
-[deno.land/x/katoa](https://deno.land/x/katoa/mod.ts)
+👉 **Typescript API**: [deno.land/x/katoa](https://deno.land/x/katoa/mod.ts)
 
 👉 **Discord**: [Discord](https://discord.gg/7qNBeGmB5A)

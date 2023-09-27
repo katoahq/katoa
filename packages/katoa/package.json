@@ -15,7 +15,7 @@
     "install": "node install.js"
   },
   "bin": {
-    "katoa": "./bin/katoa"
+    "katoa": "bin/katoa"
   },
   "author": "Katoa team"
 }
