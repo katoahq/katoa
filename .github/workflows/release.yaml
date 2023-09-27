@@ -84,8 +84,8 @@ jobs:
           command: build
           args: -p katoa-cli --release --target ${{ matrix.target }} -F ${{ matrix.features }}
         env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}
+          # SENTRY_AUTH_TOKEN: \$\{{ secrets.SENTRY_AUTH_TOKEN }}
+          # SEGMENT_WRITE_KEY: \$\{{ secrets.SEGMENT_WRITE_KEY }}
           CC_aarch64_unknown_linux_musl: clang
           AR_aarch64_unknown_linux_musl: llvm-ar
           CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUSTFLAGS: -Clink-self-contained=yes -Clinker=rust-lld
@@ -199,6 +199,8 @@ jobs:
     name: Release to NPM
     runs-on: ubuntu-latest
     needs: docker-release
+    # TODO: get this working
+    if: false
     steps:
       - uses: actions/checkout@master
       - name: Publish to NPM
@@ -237,6 +239,8 @@ jobs:
           envsubst '${version},${sha256sum}' < aur/PKGBUILD > aur/katoa-bin/PKGBUILD
           cat aur/katoa-bin/PKGBUILD
       - name: Publish katoa-bin to the AUR
+        # TODO: Uncomment when ready to publish
+        if: false
         uses: superfly/aur-releaser@ba29a0a809d7221713a104f9c9a23c34ee5b0742
         with:
           pkgname: katoa-bin
