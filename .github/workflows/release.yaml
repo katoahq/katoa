@@ -86,8 +86,6 @@ jobs:
           command: build
           args: -p katoa-cli --release --target ${{ matrix.target }} -F ${{ matrix.features }}
         env:
-          # SENTRY_AUTH_TOKEN: \$\{{ secrets.SENTRY_AUTH_TOKEN }}
-          # SEGMENT_WRITE_KEY: \$\{{ secrets.SEGMENT_WRITE_KEY }}
           CC_aarch64_unknown_linux_musl: clang
           AR_aarch64_unknown_linux_musl: llvm-ar
           CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUSTFLAGS: -Clink-self-contained=yes -Clinker=rust-lld
