@@ -1,6 +1,6 @@
 {
   "name": "@katoahq/katoa",
-  "version": "0.1.50",
+  "version": "0.1.51",
   "description": "Katoa is a next-generation CI framework using TypeScript",
   "repository": {
     "type": "git",

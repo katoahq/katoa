@@ -1,4 +1,4 @@
-ARG KATOA_VERSION=0.1.50
+ARG KATOA_VERSION=0.1.51
 
 FROM buildpack-deps:20.04-curl AS download
 
