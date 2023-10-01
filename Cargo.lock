@@ -232,7 +232,7 @@ dependencies = [
 [[package]]
 name = "buildkit-rs"
 version = "0.1.0"
-source = "git+https://github.com/katoahq/buildkit-rs.git#0ac5ee852d243fe5f883f741e8fad438cd6e4b68"
+source = "git+https://github.com/katoahq/buildkit-rs.git#3170be7c85fef659a77280f2f14498969275d46a"
 dependencies = [
  "buildkit-rs-client",
  "buildkit-rs-ignore",
@@ -245,7 +245,7 @@ dependencies = [
 [[package]]
 name = "buildkit-rs-client"
 version = "0.1.0"
-source = "git+https://github.com/katoahq/buildkit-rs.git#0ac5ee852d243fe5f883f741e8fad438cd6e4b68"
+source = "git+https://github.com/katoahq/buildkit-rs.git#3170be7c85fef659a77280f2f14498969275d46a"
 dependencies = [
  "bitflags 2.4.0",
  "buildkit-rs-llb",
@@ -275,7 +275,7 @@ dependencies = [
 [[package]]
 name = "buildkit-rs-ignore"
 version = "0.1.0"
-source = "git+https://github.com/katoahq/buildkit-rs.git#0ac5ee852d243fe5f883f741e8fad438cd6e4b68"
+source = "git+https://github.com/katoahq/buildkit-rs.git#3170be7c85fef659a77280f2f14498969275d46a"
 dependencies = [
  "path-clean",
  "regex",
@@ -285,7 +285,7 @@ dependencies = [
 [[package]]
 name = "buildkit-rs-llb"
 version = "0.1.0"
-source = "git+https://github.com/katoahq/buildkit-rs.git#0ac5ee852d243fe5f883f741e8fad438cd6e4b68"
+source = "git+https://github.com/katoahq/buildkit-rs.git#3170be7c85fef659a77280f2f14498969275d46a"
 dependencies = [
  "buildkit-rs-proto",
  "buildkit-rs-reference",
@@ -299,7 +299,7 @@ dependencies = [
 [[package]]
 name = "buildkit-rs-proto"
 version = "0.1.0"
-source = "git+https://github.com/katoahq/buildkit-rs.git#0ac5ee852d243fe5f883f741e8fad438cd6e4b68"
+source = "git+https://github.com/katoahq/buildkit-rs.git#3170be7c85fef659a77280f2f14498969275d46a"
 dependencies = [
  "prost",
  "prost-build",
@@ -311,7 +311,7 @@ dependencies = [
 [[package]]
 name = "buildkit-rs-reference"
 version = "0.1.0"
-source = "git+https://github.com/katoahq/buildkit-rs.git#0ac5ee852d243fe5f883f741e8fad438cd6e4b68"
+source = "git+https://github.com/katoahq/buildkit-rs.git#3170be7c85fef659a77280f2f14498969275d46a"
 dependencies = [
  "once_cell",
  "regex",
@@ -321,7 +321,7 @@ dependencies = [
 [[package]]
 name = "buildkit-rs-util"
 version = "0.1.0"
-source = "git+https://github.com/katoahq/buildkit-rs.git#0ac5ee852d243fe5f883f741e8fad438cd6e4b68"
+source = "git+https://github.com/katoahq/buildkit-rs.git#3170be7c85fef659a77280f2f14498969275d46a"
 
 [[package]]
 name = "bumpalo"
