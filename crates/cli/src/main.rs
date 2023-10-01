@@ -5,8 +5,6 @@ mod git;
 mod job;
 mod logging;
 mod oci;
-#[cfg(feature = "telemetry")]
-mod telemetry;
 #[cfg(feature = "self-update")]
 mod update;
 mod util;
@@ -23,8 +21,6 @@ use std::{
     path::{Path, PathBuf},
     process::{ExitCode, Stdio},
 };
-#[cfg(feature = "telemetry")]
-use telemetry::{segment::TrackEvent, segment_enabled, sentry::sentry_init};
 use tracing::{error, info, info_span, warn, Instrument};
 #[cfg(feature = "self-update")]
 use update::check_for_update;
@@ -509,28 +505,6 @@ impl Commands {
 
                 info!(trigger = true);
 
-                // Only send telemetry when we know we should execute
-                #[cfg(feature = "telemetry")]
-                let telem_join = segment_enabled().then(|| {
-                    let pipeline_name = pipeline_name.clone();
-                    let pipeline_length = std::fs::read_to_string(&pipeline_path)
-                        .map(|f| f.lines().count())
-                        .ok();
-
-                    tokio::spawn(
-                        TrackEvent::PipelineExecuted {
-                            pipeline_name,
-                            pipeline_length,
-                            job_count: pipeline.jobs.len(),
-                            step_count: pipeline
-                                .jobs
-                                .iter()
-                                .fold(0, |acc, job| acc + job.steps.len()),
-                        }
-                        .post(),
-                    )
-                });
-
                 let inspect_output = Command::new(oci_backend.as_str())
                     .args([
                         "inspect",
@@ -772,11 +746,6 @@ impl Commands {
                     }
                 }
 
-                #[cfg(feature = "telemetry")]
-                if let Some(join) = telem_join {
-                    join.await.ok();
-                }
-
                 if exit_code != 0 {
                     std::process::exit(exit_code)
                 }
@@ -1009,29 +978,10 @@ impl Commands {
             Commands::Debug { .. } => "debug",
         }
     }
-
-    #[cfg(feature = "telemetry")]
-    fn track(&self) -> bool {
-        match self {
-            Commands::Run { .. } => true,
-            Commands::Step { .. } => false,
-            Commands::Init { .. } => true,
-            Commands::New { .. } => true,
-            Commands::Update => true,
-            Commands::Completions { .. } => false,
-            #[cfg(feature = "fig-completions")]
-            Commands::FigCompletion => false,
-            Commands::Open { .. } => false,
-            Commands::Doctor { .. } => true,
-            Commands::Debug { .. } => false,
-        }
-    }
 }
 
 #[tokio::main]
 async fn main() -> ExitCode {
-    #[cfg(feature = "telemetry")]
-    let _sentry_guard = sentry_init();
     if let Err(err) = logging_init() {
         eprintln!("Failed to init logger: {err:#?}");
         return ExitCode::FAILURE;
@@ -1043,23 +993,7 @@ async fn main() -> ExitCode {
 
     let command = Commands::parse();
 
-    #[cfg(feature = "telemetry")]
-    let telem_join = (command.track() && segment_enabled()).then(|| {
-        let subcommand = command.subcommand().to_owned();
-        tokio::spawn(
-            TrackEvent::SubcommandExecuted {
-                subcommand_name: subcommand,
-            }
-            .post(),
-        )
-    });
-
     let res = command.execute().await;
-
-    #[cfg(feature = "telemetry")]
-    if let Some(join) = telem_join {
-        join.await.ok();
-    }
 
     match res {
         Ok(_) => ExitCode::SUCCESS,
