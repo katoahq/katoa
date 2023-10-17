@@ -49,7 +49,7 @@
   open = "5.0.0"
   owo-colors = { version = "3.5.0", features = ["supports-colors"] }
   regex = "1.10.1"
-  self_update = { version = "0.37.0", default-features = false, features = [
+  self_update = { version = "0.38.0", default-features = false, features = [
     "archive-tar",
     "compression-flate2",
     "rustls",
